@@ -1,5 +1,5 @@
 export function valiadandoImput(input) {
-    const tipoDato = input.dataset.tipo;
+    const tipoDato = input.dataset.tipo; // nos permite conocer al tipo de input  con data-tipo;
 
     if (validacionesFunciones[tipoDato]) {
         validacionesFunciones[tipoDato](input);
@@ -11,11 +11,20 @@ export function valiadandoImput(input) {
     }
     else {
         input.parentElement.classList.add("input-container--invalid");
-    }; input.parentElement.querySelector(".input-message-error").innerHTML = mostrarMensajeError(tipoDato, input);
+    input.parentElement.querySelector(".input-message-error").innerHTML = mostrarMensajeError(tipoDato, input);
+    
+    }; 
 
 
 };
-    
+    //este es un arreglo,
+const tipoDeError = [
+    "valueMissing",
+    "typeMismatch",
+    "patternMismatch",
+    "customError",
+];
+
  function mostrarMensajeError(tipoDato, input){
     let mensage = "";
     tipoDeError.forEach(error => {
@@ -31,13 +40,7 @@ export function valiadandoImput(input) {
 
 
 
-//este es un arreglo,
-const tipoDeError = [
-    "valueMissing",
-    "typeMismatch",
-    "patternMismatch",
-    "customError",
-];
+
 
 const mensajesDeEroor = {
     nombre: {
@@ -57,6 +60,20 @@ const mensajesDeEroor = {
         valueMissing: "este campo no puede estar vacio",
         customError: "deves tener almenos 18 años",
         
+    },
+    numero: {
+        valueMissing: "este campo numero  no puede estar vacio",
+
+    },
+    direccion: {
+        valueMissing: "el campo  direccion  no puede estar vacio",
+    },
+    ciudad: {
+        valueMissing: "este campo no puede estar vacio",
+        
+    },
+    estado: {
+        valueMissing: "este campo es indispensable ",
     }
     
 
@@ -70,6 +87,10 @@ const validacionesFunciones = {
 
 
 
+
+
+
+// es validacion de edad;
 function comparacionn(input) {
     const nacimentoCliente = new Date(input.value);
 
