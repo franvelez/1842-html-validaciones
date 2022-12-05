@@ -1,94 +1,115 @@
-export function valida(input) {
-  const tipoDeInput = input.dataset.tipo;
-  if (validadores[tipoDeInput]) {
-    validadores[tipoDeInput](input);
-  }
+export function valiadandoImput(input) {
+    const tipoDato = input.dataset.tipo; // nos permite conocer al tipo de input  con data-tipo;
 
-  if (input.validity.valid) {
-    input.parentElement.classList.remove("input-container--invalid");
-    input.parentElement.querySelector(".input-message-error").innerHTML = "";
-  } else {
-    input.parentElement.classList.add("input-container--invalid");
-    input.parentElement.querySelector(".input-message-error").innerHTML =
-      mostrarMensajeDeError(tipoDeInput, input);
-  }
-}
+    if (validacionesFunciones[tipoDato]) {
+        validacionesFunciones[tipoDato](input);
 
-const tipoDeErrores = [
-  "valueMissing",
-  "typeMismatch",
-  "patternMismatch",
-  "customError",
+    };
+    if (input.validity.valid) {
+        input.parentElement.classList.remove("input-container--invalid");
+        input.parentElement.querySelector(".input-message-error").innerHTML = "";
+    }
+    else {
+        input.parentElement.classList.add("input-container--invalid");
+    input.parentElement.querySelector(".input-message-error").innerHTML = mostrarMensajeError(tipoDato, input);
+    
+    }; 
+
+
+};
+    //este es un arreglo,
+const tipoDeError = [
+    "valueMissing",
+    "typeMismatch",
+    "patternMismatch",
+    "customError",
 ];
 
-const mensajesDeError = {
-  nombre: {
-    valueMissing: "El campo nombre no puede estar vacío",
-  },
-  email: {
-    valueMissing: "El campo correo no puede estar vacío",
-    typeMismatch: "El correo no es válido",
-  },
-  password: {
-    valueMissing: "El campo contraseña no puede estar vacío",
-    patternMismatch:
-      "Al menos 6 caracteres, máximo 12, debe contener una letra minúscula, una letra mayúscula, un número y no puede contener caracteres especiales.",
-  },
-  nacimiento: {
-    valueMissing: "Este campo no puede estar vacío",
-    customError: "Debes tener al menos 18 años de edad",
-  },
-  numero: {
-    valueMissing: "Este campo no puede estar vacío",
-    patternMismatch: "El formato requerido es XXXXXXXXXX 10 números",
-  },
-  direccion: {
-    valueMissing: "Este campo no puede estar vacío",
-    patternMismatch: "La dirección debe contener entre 10 a 40 caracteres.",
-  },
-  ciudad: {
-    valueMissing: "Este campo no puede estar vacío",
-    patternMismatch: "La ciudad debe contener entre 10 a 40 caracteres.",
-  },
-  estado: {
-    valueMissing: "Este campo no puede estar vacío",
-    patternMismatch: "El estado debe contener entre 10 a 40 caracteres.",
-  },
+ function mostrarMensajeError(tipoDato, input){
+    let mensage = "";
+    tipoDeError.forEach(error => {
+        if (input.validity[error]) {
+            console.log(TypeError.error);
+            console.log(input.validity[error]);
+            console.log(mensajesDeEroor[tipoDato][error]);
+            mensage = mensajesDeEroor[tipoDato][error];
+        };
+    });
+    return mensage;
 };
 
-const validadores = {
-  nacimiento: (input) => validarNacimiento(input),
-};
 
-function mostrarMensajeDeError(tipoDeInput, input) {
-  let mensaje = "";
-  tipoDeErrores.forEach((error) => {
-    if (input.validity[error]) {
-      console.log(tipoDeInput, error);
-      console.log(input.validity[error]);
-      console.log(mensajesDeError[tipoDeInput][error]);
-      mensaje = mensajesDeError[tipoDeInput][error];
+
+
+
+const mensajesDeEroor = {
+    nombre: {
+        valueMissing: "este campo no puede estar vacio",
+    },
+    email: {
+        valueMissing: "este campo no puede estar vacio",
+        typeMismatch: "el correo no es valido",
+    },
+
+    password: {
+        valueMissing: "este campo no puede estar vacio",
+        patternMismatch: "al menos 6 caracteres ,maximo 12 ,deve una letra de mayuscula , un numero "
+        
+    },
+    nacimiento: {
+        valueMissing: "este campo no puede estar vacio",
+        customError: "deves tener almenos 18 años",
+        
+    },
+    numero: {
+        valueMissing: "este campo numero  no puede estar vacio",
+
+    },
+    direccion: {
+        valueMissing: "el campo  direccion  no puede estar vacio",
+    },
+    ciudad: {
+        valueMissing: "este campo no puede estar vacio",
+        
+    },
+    estado: {
+        valueMissing: "este campo es indispensable ",
     }
-  });
-  return mensaje;
-}
+    
 
-function validarNacimiento(input) {
-  const fechaCliente = new Date(input.value);
-  let mensaje = "";
-  if (!mayorDeEdad(fechaCliente)) {
-    mensaje = "Debes tener al menos 18 años de edad";
-  }
+};
+//para saber mas de los campos depenndiendo de del typo utilizamos """"$0.validity""  permite ver el estado de un input para la 
+//la agre¿gacion y eliminacion de campos ;
 
-  input.setCustomValidity(mensaje);
-}
+const validacionesFunciones = {
+    nacimiento: (input) => comparacionn(input),
+};
 
-function mayorDeEdad(fecha) {
-  const fechaActual = new Date();
-  const diferenciaFechas = new Date(
-    fecha.getUTCFullYear() + 18,
-    fecha.getUTCMonth(),
-    fecha.getUTCDate()
-  );
-  return diferenciaFechas <= fechaActual;
-}
+
+
+
+
+
+// es validacion de edad;
+function comparacionn(input) {
+    const nacimentoCliente = new Date(input.value);
+
+    let mensage = '';
+    if (!comparacion(nacimentoCliente)) {
+        mensage = "USTED ESMENOR DE EDAD";
+        
+    };
+
+    input.setCustomValidity(mensage);
+
+};
+
+function comparacion(fecha) {
+    const fechaActual = new Date();
+    const comparativa = new Date(
+        fecha.getUTCFullYear() + 18,
+        fecha.getUTCMonth(),
+        fecha.getUTCDay(),
+    );
+    return comparativa <= fechaActual;
+};
